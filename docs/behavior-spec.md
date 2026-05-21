@@ -12,6 +12,8 @@ This document describes the behaviors the grid must guarantee. It is intentional
 - The vertical scrollbar must belong to the body area only and must never cover the header row.
 - All visible rows must use a uniform height within a given density mode.
 - The grid must maintain full row borders and cell borders throughout all states.
+- Columns marked as frozen must remain visible while horizontal scrolling occurs.
+- Frozen columns should support both left and right placement.
 
 ## Selection Rules
 

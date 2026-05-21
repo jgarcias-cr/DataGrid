@@ -141,6 +141,22 @@ function resolveColumnWidth(column) {
    return '180px'
 }
 
+function combineCssLengths(...values) {
+   const parts = values
+      .map((value) => (typeof value === 'number' ? `${value}px` : String(value ?? '').trim()))
+      .filter(Boolean)
+
+   if (!parts.length) {
+      return '0px'
+   }
+
+   if (parts.length === 1) {
+      return parts[0]
+   }
+
+   return `calc(${parts.join(' + ')})`
+}
+
 function toHeaderLabel(field = '') {
    if (!field) {
       return ''
@@ -170,6 +186,8 @@ function normalizeColumns(columns) {
       align: column.align ?? 'left',
       sortable: column.sortable ?? DEFAULT_SORTABLE,
       filterable: column.filterable ?? DEFAULT_FILTERABLE,
+      pin: column.pin === 'left' || column.pin === 'right' ? column.pin : null,
+      resolvedWidth: resolveColumnWidth(column),
    }))
 }
 
@@ -564,6 +582,38 @@ function DataGrid({
    const hasFilterRow = filterable && normalizedColumns.some((column) => column.filterable)
    const hasFooterRow = !paginationEnabled && Boolean(footer)
    const hasSummaryRow = Boolean(summaryRow)
+   const pinnedColumns = useMemo(() => {
+      const positions = new Map()
+      let leftOffset = '0px'
+
+      normalizedColumns.forEach((column) => {
+         if (column.pin === 'left') {
+            positions.set(column.key, {
+               side: 'left',
+               offset: leftOffset,
+            })
+
+            leftOffset = combineCssLengths(leftOffset, column.resolvedWidth)
+         }
+      })
+
+      let rightOffset = '0px'
+
+      for (let index = normalizedColumns.length - 1; index >= 0; index -= 1) {
+         const column = normalizedColumns[index]
+
+         if (column.pin === 'right') {
+            positions.set(column.key, {
+               side: 'right',
+               offset: rightOffset,
+            })
+
+            rightOffset = combineCssLengths(rightOffset, column.resolvedWidth)
+         }
+      }
+
+      return positions
+   }, [normalizedColumns])
 
    useEffect(() => {
       if (selection === 'none') {
@@ -631,7 +681,7 @@ function DataGrid({
       }
    }, [height, isTransposeMode, loading, pagedRows.length, transposeFooterSpace])
 
-   const gridTemplateColumns = normalizedColumns.map(resolveColumnWidth).join(' ')
+   const gridTemplateColumns = normalizedColumns.map((column) => column.resolvedWidth).join(' ')
    const resolvedHeight = isTransposeMode
       ? measuredTransposeHeight ?? resolveTransposeHeight({
            height,
@@ -779,6 +829,20 @@ function DataGrid({
 
    const showFooter = !paginationEnabled && footer
    const summaryRowCount = summaryRow ? 1 : 0
+   const getPinnedCellProps = (column) => {
+      const pinnedColumn = pinnedColumns.get(column.key)
+
+      if (!pinnedColumn) {
+         return {}
+      }
+
+      return {
+         className: `dg-cell--pinned dg-cell--pinned-${pinnedColumn.side}`,
+         style: {
+            [pinnedColumn.side]: pinnedColumn.offset,
+         },
+      }
+   }
    const renderTransposeRecord = (
       row,
       rowIndex,
@@ -1092,11 +1156,15 @@ function DataGrid({
                   <div className="dg-row dg-row--header" role="row" aria-label="Data grid header">
                      {normalizedColumns.map((column) => {
                         const sortState = getSortState(column.key)
+                        const pinnedCellProps = getPinnedCellProps(column)
 
                         return (
                            <div
                               key={column.key}
-                              className={`dg-cell dg-cell--header dg-align-${column.align}`}
+                              className={`dg-cell dg-cell--header dg-align-${column.align} ${
+                                 pinnedCellProps.className ?? ''
+                              }`.trim()}
+                              style={pinnedCellProps.style}
                               role="columnheader"
                            >
                               <button
@@ -1124,44 +1192,52 @@ function DataGrid({
 
                   {hasFilterRow ? (
                      <div className="dg-row dg-row--filter" role="row" aria-label="Data grid filters">
-                        {normalizedColumns.map((column) => (
-                           <div
-                              key={column.key}
-                              className={`dg-cell dg-cell--filter dg-align-${column.align}`}
-                              role="gridcell"
-                           >
-                              {column.filterable ? (
-                                 column.filterType === 'select' && Array.isArray(column.filterOptions) ? (
-                                    <select
-                                       className="dg-filterInput"
-                                       value={filters[column.key] ?? ''}
-                                       onChange={(event) =>
-                                          handleFilterChange(column.key, event.target.value)
-                                       }
-                                       aria-label={`Filter ${column.headerName}`}
-                                    >
-                                       <option value="">All</option>
-                                       {column.filterOptions.map((option) => (
-                                          <option key={option.value} value={option.value}>
-                                             {option.label}
-                                          </option>
-                                       ))}
-                                    </select>
-                                 ) : (
-                                    <input
-                                       className="dg-filterInput"
-                                       type="text"
-                                       value={filters[column.key] ?? ''}
-                                       onChange={(event) =>
-                                          handleFilterChange(column.key, event.target.value)
-                                       }
-                                       placeholder={`Filter ${column.headerName}`}
-                                       aria-label={`Filter ${column.headerName}`}
-                                    />
-                                 )
-                              ) : null}
-                           </div>
-                        ))}
+                        {normalizedColumns.map((column) => {
+                           const pinnedCellProps = getPinnedCellProps(column)
+
+                           return (
+                              <div
+                                 key={column.key}
+                                 className={`dg-cell dg-cell--filter dg-align-${column.align} ${
+                                    pinnedCellProps.className ?? ''
+                                 }`.trim()}
+                                 style={pinnedCellProps.style}
+                                 role="gridcell"
+                              >
+                                 {column.filterable ? (
+                                    column.filterType === 'select' &&
+                                    Array.isArray(column.filterOptions) ? (
+                                       <select
+                                          className="dg-filterInput"
+                                          value={filters[column.key] ?? ''}
+                                          onChange={(event) =>
+                                             handleFilterChange(column.key, event.target.value)
+                                          }
+                                          aria-label={`Filter ${column.headerName}`}
+                                       >
+                                          <option value="">All</option>
+                                          {column.filterOptions.map((option) => (
+                                             <option key={option.value} value={option.value}>
+                                                {option.label}
+                                             </option>
+                                          ))}
+                                       </select>
+                                    ) : (
+                                       <input
+                                          className="dg-filterInput"
+                                          type="text"
+                                          value={filters[column.key] ?? ''}
+                                          onChange={(event) =>
+                                             handleFilterChange(column.key, event.target.value)
+                                          }
+                                          placeholder={`Filter ${column.headerName}`}
+                                          aria-label={`Filter ${column.headerName}`}
+                                       />
+                                    )
+                                 ) : null}
+                              </div>
+                           )
+                        })}
                      </div>
                   ) : null}
                </div>
@@ -1223,14 +1299,18 @@ function DataGrid({
                                     }),
                                  )
                               }
-                           >
+                          >
                               {normalizedColumns.map((column) => {
                                  const value = row[column.field]
+                                 const pinnedCellProps = getPinnedCellProps(column)
 
                                  return (
                                     <div
                                        key={column.key}
-                                       className={`dg-cell dg-align-${column.align}`}
+                                       className={`dg-cell dg-cell--body dg-align-${column.align} ${
+                                          pinnedCellProps.className ?? ''
+                                       }`.trim()}
+                                       style={pinnedCellProps.style}
                                        role="gridcell"
                                        onClick={(event) => {
                                           event.stopPropagation()
@@ -1285,11 +1365,15 @@ function DataGrid({
                      <div className="dg-row dg-row--summary" role="row" aria-label="Summary row">
                         {normalizedColumns.map((column, rowIndex) => {
                            const value = summaryRow[column.key]
+                           const pinnedCellProps = getPinnedCellProps(column)
 
                            return (
                               <div
                                  key={column.key}
-                                 className={`dg-cell dg-cell--summary dg-align-${column.align}`}
+                                 className={`dg-cell dg-cell--summary dg-align-${column.align} ${
+                                    pinnedCellProps.className ?? ''
+                                 }`.trim()}
+                                 style={pinnedCellProps.style}
                                  role="gridcell"
                               >
                                  <span className="dg-value">

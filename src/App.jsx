@@ -3,13 +3,21 @@ import DataGrid from './DataGrid'
 import './App.css'
 
 const columns = [
-   { key: 'order_id', field: 'order_id', align: 'left', width: 120, filterable: true },
+   {
+      key: 'order_id',
+      field: 'order_id',
+      align: 'left',
+      width: 120,
+      filterable: true,
+      pin: 'left',
+   },
    {
       key: 'customer_name',
       field: 'customer_name',
       align: 'left',
       width: 220,
       filterable: true,
+      pin: 'left',
       renderCell: ({ value, row }) => (
          <div className="customer-cell">
             <strong>{value}</strong>
@@ -73,9 +81,10 @@ const columns = [
       field: 'actions',
       headerName: 'Actions',
       align: 'center',
-      width: 140,
+      width: 105,
       sortable: false,
       filterable: false,
+      pin: 'right',
       renderCell: ({ row }) => (
          <button
             type="button"

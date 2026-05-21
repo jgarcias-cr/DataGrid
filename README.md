@@ -12,6 +12,7 @@ A custom React DataGrid component focused on predictable sizing, synchronized sc
 - Pagination with page-size control
 - Summary row support
 - Footer support
+- Frozen columns on the left or right edge
 - Custom header and cell rendering
 - Theme-aware styling with light, dark, and host-driven modes
 - Responsive mobile transpose mode
@@ -27,6 +28,7 @@ A custom React DataGrid component focused on predictable sizing, synchronized sc
 - `pagination` limits visible rows and exposes paging controls
 - `summary` can compute or render an aggregate row
 - `footer` can show status text or custom footer content
+- `pin: 'left' | 'right'` freezes a column in place while scrolling
 - `mobileMode="auto"` switches to a transpose layout on narrow screens
 
 ## Layout Behavior

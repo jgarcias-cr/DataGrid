@@ -8,7 +8,9 @@
    --dg-accent: var(--accent, #4f46e5);
    --dg-accent-soft: color-mix(in oklab, var(--dg-accent) 12%, transparent);
    --dg-row-hover: color-mix(in oklab, var(--dg-accent) 8%, transparent);
+   --dg-row-hover-solid: color-mix(in oklab, var(--dg-surface) 92%, var(--dg-accent) 8%);
    --dg-row-selected: color-mix(in oklab, var(--dg-accent) 14%, white 86%);
+   --dg-row-selected-solid: color-mix(in oklab, var(--dg-surface) 86%, var(--dg-accent) 14%);
    --dg-row-height: 34px;
    --dg-header-height: 40px;
    --dg-cell-padding-x: 10px;
@@ -281,21 +283,32 @@
 }
 
 .dg-row--header {
+   --dg-row-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.42));
+   --dg-row-bg-solid: color-mix(in oklab, var(--dg-surface-strong) 12%, white 88%);
    position: sticky;
    top: 0;
    z-index: 1;
    min-height: var(--dg-header-height);
-   background: color-mix(in oklab, var(--dg-surface-strong) 12%, white 88%);
+   background: var(--dg-row-bg);
+}
+
+.dg-row--filter {
+   --dg-row-bg: color-mix(in oklab, var(--dg-surface) 80%, white 20%);
+   --dg-row-bg-solid: color-mix(in oklab, var(--dg-surface) 80%, white 20%);
 }
 
 .dg-row--body {
+   --dg-row-bg: color-mix(in oklab, var(--dg-surface) 92%, white 8%);
+   --dg-row-bg-solid: color-mix(in oklab, var(--dg-surface) 92%, white 8%);
    min-height: var(--dg-row-height);
    border-bottom: 1px solid var(--dg-border-soft);
    cursor: pointer;
+   background: var(--dg-row-bg);
 }
 
 .dg-row--body:hover {
-   background: var(--dg-row-hover);
+   --dg-row-bg: var(--dg-row-hover-solid);
+   --dg-row-bg-solid: var(--dg-row-hover-solid);
 }
 
 .dg-cell {
@@ -306,6 +319,26 @@
    border-right: 1px solid var(--dg-border-soft);
    color: var(--dg-text);
    box-sizing: border-box;
+}
+
+.dg-cell--pinned {
+   position: sticky;
+   z-index: 2;
+   background: var(--dg-row-bg-solid, var(--dg-row-bg));
+   background-image: none;
+   opacity: 1;
+}
+
+.dg-cell--pinned-left {
+   box-shadow:
+      2px 0 0 var(--dg-border),
+      8px 0 18px rgba(15, 23, 42, 0.12);
+}
+
+.dg-cell--pinned-right {
+   box-shadow:
+      -2px 0 0 var(--dg-border),
+      -8px 0 18px rgba(15, 23, 42, 0.12);
 }
 
 .dg-cell:last-child {
@@ -319,12 +352,12 @@
    letter-spacing: 0.08em;
    text-transform: uppercase;
    color: var(--dg-text-strong);
-   background: linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.42));
+   background: var(--dg-row-bg);
 }
 
 .dg-cell--filter {
    min-height: var(--dg-filter-height);
-   background: color-mix(in oklab, var(--dg-surface) 80%, white 20%);
+   background: var(--dg-row-bg);
 }
 
 .dg-align-left {
@@ -416,26 +449,61 @@
 }
 
 .dg-row--body:nth-child(2n) {
-   background: color-mix(in oklab, var(--dg-surface) 92%, white 8%);
+   --dg-row-bg: color-mix(in oklab, var(--dg-surface) 92%, white 8%);
 }
 
 .dg-row--body.is-selected {
-   background: var(--dg-row-selected);
+   --dg-row-bg: var(--dg-row-selected-solid);
+   --dg-row-bg-solid: var(--dg-row-selected-solid);
 }
 
 .dg-row--summary {
+   --dg-row-bg: color-mix(in oklab, var(--dg-surface-strong) 14%, white 86%);
+   --dg-row-bg-solid: color-mix(in oklab, var(--dg-surface-strong) 14%, white 86%);
    min-height: var(--dg-row-height);
    position: sticky;
    bottom: 0;
    z-index: 2;
    border-top: 1px solid var(--dg-border);
-   background: color-mix(in oklab, var(--dg-surface-strong) 14%, white 86%);
+   background: var(--dg-row-bg);
    font-weight: 700;
    box-shadow: 0 -8px 16px rgba(15, 23, 42, 0.08);
 }
 
 .dg-cell--summary {
    color: var(--dg-text-strong);
+   background: var(--dg-row-bg);
+}
+
+.dg-row--header .dg-cell--pinned {
+   z-index: 5;
+   background: var(--dg-row-bg-solid, var(--dg-row-bg));
+   background-image: none;
+}
+
+.dg-row--filter .dg-cell--pinned {
+   z-index: 5;
+   background: var(--dg-row-bg-solid, var(--dg-row-bg));
+   background-image: none;
+}
+
+.dg-row--body .dg-cell--pinned {
+   background: var(--dg-row-bg-solid, var(--dg-row-bg));
+   background-image: none;
+}
+
+.dg-row--body.is-selected .dg-cell--pinned {
+   background: var(--dg-row-bg-solid, var(--dg-row-bg));
+}
+
+.dg-row--body:hover .dg-cell--pinned {
+   background: var(--dg-row-bg-solid, var(--dg-row-bg));
+}
+
+.dg-row--summary .dg-cell--pinned {
+   z-index: 4;
+   background: var(--dg-row-bg-solid, var(--dg-row-bg));
+   background-image: none;
 }
 
 .dg-state {
@@ -595,7 +663,9 @@
       --dg-text: var(--text, #cbd5e1);
       --dg-text-strong: var(--text-h, #f8fafc);
       --dg-row-hover: rgba(96, 165, 250, 0.12);
+      --dg-row-hover-solid: color-mix(in oklab, var(--dg-surface) 88%, #60a5fa 12%);
       --dg-row-selected: rgba(96, 165, 250, 0.18);
+      --dg-row-selected-solid: color-mix(in oklab, var(--dg-surface) 82%, #60a5fa 18%);
    }
 
    .dg-frame {
@@ -609,28 +679,37 @@
    }
 
    .dg-row--header {
-      background: color-mix(in oklab, var(--dg-surface-strong) 18%, #111827 82%);
-   }
-
-   .dg-cell--header {
-      background: linear-gradient(180deg, rgba(17, 24, 39, 0.8), rgba(17, 24, 39, 0.55));
+      --dg-row-bg: linear-gradient(180deg, rgba(17, 24, 39, 0.8), rgba(17, 24, 39, 0.55));
+      --dg-row-bg-solid: color-mix(in oklab, var(--dg-surface-strong) 18%, #111827 82%);
    }
 
    .dg-row--body:nth-child(2n) {
-      background: color-mix(in oklab, var(--dg-surface) 90%, #ffffff 10%);
+      --dg-row-bg: color-mix(in oklab, var(--dg-surface) 90%, #ffffff 10%);
+      --dg-row-bg-solid: color-mix(in oklab, var(--dg-surface) 90%, #ffffff 10%);
    }
 
    .dg-row--body.is-selected {
-      background: rgba(96, 165, 250, 0.18);
+      --dg-row-bg: var(--dg-row-selected-solid);
+      --dg-row-bg-solid: var(--dg-row-selected-solid);
+   }
+
+   .dg-row--filter {
+      --dg-row-bg: color-mix(in oklab, var(--dg-surface) 76%, #111827 24%);
+      --dg-row-bg-solid: color-mix(in oklab, var(--dg-surface) 76%, #111827 24%);
    }
 
    .dg-cell--filter {
-      background: color-mix(in oklab, var(--dg-surface) 76%, #111827 24%);
+      background: var(--dg-row-bg);
    }
 
    .dg-filterInput {
       background: color-mix(in oklab, #111827 92%, var(--dg-accent-soft) 8%);
       color: var(--dg-text-strong);
+   }
+
+   .dg-row--summary {
+      --dg-row-bg: color-mix(in oklab, var(--dg-surface-strong) 18%, #111827 82%);
+      --dg-row-bg-solid: color-mix(in oklab, var(--dg-surface-strong) 18%, #111827 82%);
    }
 
    .dg-transposeRecordShell {

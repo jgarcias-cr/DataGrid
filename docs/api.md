@@ -65,7 +65,7 @@ The exact export name and module path can be finalized during implementation, bu
 | `filterable` | `boolean` | Overrides global filtering behavior for this column. |
 | `hidden` | `boolean` | Hides the column without removing it from metadata. |
 | `resizable` | `boolean` | Allows user resizing if supported. |
-| `pin` | `'left' \| 'right'` | Optional pinned positioning. Can be added later if not implemented in phase 1. |
+| `pin` | `'left' \| 'right'` | Optional pinned positioning for freezing columns on the left or right edge. |
 | `renderHeader` | `(params) => ReactNode` | Custom header renderer. |
 | `renderCell` | `(params) => ReactNode` | Custom cell renderer. |
 | `valueGetter` | `(row) => any` | Derived value accessor. |
