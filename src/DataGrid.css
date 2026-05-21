@@ -1,0 +1,678 @@
+.dg-shell {
+   --dg-surface: color-mix(in oklab, var(--bg, #f8fafc) 88%, white 12%);
+   --dg-surface-strong: color-mix(in oklab, var(--bg, #f8fafc) 76%, #0f172a 24%);
+   --dg-border: color-mix(in oklab, var(--border, #d7dbe4) 88%, #0f172a 12%);
+   --dg-border-soft: color-mix(in oklab, var(--border, #d7dbe4) 60%, transparent);
+   --dg-text: var(--text, #243045);
+   --dg-text-strong: var(--text-h, #0f172a);
+   --dg-accent: var(--accent, #4f46e5);
+   --dg-accent-soft: color-mix(in oklab, var(--dg-accent) 12%, transparent);
+   --dg-row-hover: color-mix(in oklab, var(--dg-accent) 8%, transparent);
+   --dg-row-selected: color-mix(in oklab, var(--dg-accent) 14%, white 86%);
+   --dg-row-height: 34px;
+   --dg-header-height: 40px;
+   --dg-cell-padding-x: 10px;
+   --dg-filter-height: 40px;
+   --dg-filter-input-height: 26px;
+   --dg-filter-input-padding-x: 10px;
+   --dg-state-min-height: 150px;
+   --dg-state-padding-y: 16px;
+   --dg-state-padding-x: 18px;
+   --dg-action-button-height: 26px;
+   --dg-pagination-height: 46px;
+   --dg-footer-height: 46px;
+   --dg-radius: 8px;
+   --dg-columns: 180px 180px 180px 180px 180px 180px;
+
+   width: 100%;
+   max-width: 100%;
+   min-width: 0;
+   box-sizing: border-box;
+   overflow: hidden;
+   display: block;
+   align-items: stretch;
+}
+
+.dg-shell--transpose {
+   width: 100%;
+   max-width: 100%;
+   min-width: 0;
+   display: block;
+}
+
+.dg-shell[role='grid'] {
+   outline: none;
+}
+
+.dg-frame {
+   display: flex;
+   flex-direction: column;
+   height: var(--dg-height, 480px);
+   width: fit-content;
+   max-width: 100%;
+   min-width: 0;
+   border: 1px solid var(--dg-border);
+   border-radius: var(--dg-radius);
+   overflow: hidden;
+   background:
+      linear-gradient(180deg, color-mix(in oklab, var(--dg-surface) 88%, white 12%) 0%, var(--dg-surface) 100%);
+   box-shadow:
+      0 24px 60px rgba(15, 23, 42, 0.12),
+      0 2px 10px rgba(15, 23, 42, 0.06);
+}
+
+.dg-frame--transpose {
+   width: 100%;
+   max-width: 100%;
+   height: min(var(--dg-height, 100svh), 100svh);
+}
+
+.dg-frame--transpose .dg-transposeLayout {
+   flex: 1 1 auto;
+   overflow: auto;
+}
+
+.dg-transposeLayout {
+   display: grid;
+   gap: 12px;
+   padding: 14px;
+   background: var(--dg-surface);
+}
+
+.dg-transposeControls {
+   display: grid;
+   gap: 10px;
+}
+
+.dg-transposeControl {
+   display: grid;
+   gap: 8px;
+   padding: 12px;
+   border: 1px solid var(--dg-border);
+   border-radius: 18px;
+   background: color-mix(in oklab, var(--dg-surface) 82%, white 18%);
+}
+
+.dg-transposeSortButton {
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   gap: 10px;
+   width: 100%;
+   padding: 0;
+   border: 0;
+   background: transparent;
+   color: var(--dg-text-strong);
+   font: inherit;
+   font-weight: 700;
+   cursor: pointer;
+}
+
+.dg-transposeSortButton:disabled {
+   cursor: default;
+   opacity: 0.7;
+}
+
+.dg-transposeSortButton:focus-visible {
+   outline: 2px solid var(--dg-accent);
+   outline-offset: 2px;
+   border-radius: 10px;
+}
+
+.dg-transposeFilter {
+   width: 100%;
+}
+
+.dg-transposeList {
+   display: grid;
+   gap: 12px;
+}
+
+.dg-transposeTableWrap {
+   display: grid;
+   gap: 12px;
+}
+
+.dg-transposeRecordShell {
+   border: 1px solid var(--dg-border);
+   border-radius: 18px;
+   background: color-mix(in oklab, var(--dg-surface) 80%, white 20%);
+   box-shadow: 0 14px 28px rgba(15, 23, 42, 0.08);
+   overflow: hidden;
+}
+
+.dg-transposeRecord {
+   width: 100%;
+   border-collapse: separate;
+   border-spacing: 0;
+   table-layout: fixed;
+}
+
+.dg-transposeRecordShell.is-selected {
+   background: var(--dg-row-selected);
+}
+
+.dg-transposeRecordShell--summary {
+   background: color-mix(in oklab, var(--dg-surface-strong) 14%, white 86%);
+}
+
+.dg-transposeFieldHeaderRow,
+.dg-transposeFieldValueRow {
+   background: transparent;
+}
+
+.dg-transposeLabelCell,
+.dg-transposeValueCell {
+   min-width: 0;
+   padding: 10px 12px;
+   border-bottom: 1px solid var(--dg-border-soft);
+   color: var(--dg-text);
+   background: transparent;
+}
+
+.dg-transposeLabelCell {
+   color: var(--dg-text-strong);
+   font-size: 0.68rem;
+   font-weight: 800;
+   text-transform: uppercase;
+   letter-spacing: 0.08em;
+   background: color-mix(in oklab, var(--dg-surface-strong) 12%, white 88%);
+}
+
+.dg-transposeValueCell {
+   cursor: pointer;
+   background: color-mix(in oklab, var(--dg-surface) 90%, white 10%);
+   font-size: 0.92rem;
+   line-height: 1.25;
+}
+
+.dg-transposeValueCell--control {
+   text-align: center;
+}
+
+.dg-transposeValueCell--control > * {
+   margin-inline: auto;
+}
+
+.dg-transposeValueCell:hover {
+   background: var(--dg-row-hover);
+}
+
+.dg-transposeValueCell:focus-visible {
+   outline: 2px solid var(--dg-accent);
+   outline-offset: -2px;
+}
+
+.dg-transposeValue {
+   color: var(--dg-text-strong);
+   font-weight: 400;
+   display: block;
+   overflow-wrap: anywhere;
+   white-space: normal;
+}
+
+.dg-transposeFieldValueRow:last-child .dg-transposeValueCell {
+   border-bottom: none;
+}
+
+.dg-headerScroll,
+.dg-bodyScroll {
+   min-width: 0;
+   width: fit-content;
+   max-width: 100%;
+   overflow-x: auto;
+   overflow-y: hidden;
+   scrollbar-gutter: stable both-edges;
+}
+
+.dg-headerScroll {
+   flex: 0 0 auto;
+   height: calc(var(--dg-header-height) + var(--dg-filter-row-height, 0px));
+   border-bottom: 1px solid var(--dg-border);
+   background: color-mix(in oklab, var(--dg-surface-strong) 12%, white 88%);
+   scrollbar-width: none;
+}
+
+.dg-headerScroll::-webkit-scrollbar {
+   display: none;
+}
+
+.dg-bodyScroll {
+   flex: 1 1 auto;
+   min-width: 0;
+   overflow-x: auto;
+   overflow-y: auto;
+   background: var(--dg-surface);
+   scrollbar-color: var(--dg-accent) transparent;
+   scrollbar-width: thin;
+}
+
+.dg-bodyScroll::-webkit-scrollbar {
+   width: 12px;
+   height: 12px;
+}
+
+.dg-bodyScroll::-webkit-scrollbar-track {
+   background: transparent;
+}
+
+.dg-bodyScroll::-webkit-scrollbar-thumb {
+   background: color-mix(in oklab, var(--dg-accent) 58%, white 42%);
+   border: 3px solid transparent;
+   border-radius: 999px;
+   background-clip: content-box;
+}
+
+.dg-bodyScroll::-webkit-scrollbar-corner {
+   background: transparent;
+}
+
+.dg-surface {
+   position: relative;
+   display: block;
+   width: max-content;
+   max-width: none;
+}
+
+.dg-row {
+   display: grid;
+   grid-template-columns: var(--dg-columns);
+   width: max-content;
+}
+
+.dg-row--header {
+   position: sticky;
+   top: 0;
+   z-index: 1;
+   min-height: var(--dg-header-height);
+   background: color-mix(in oklab, var(--dg-surface-strong) 12%, white 88%);
+}
+
+.dg-row--body {
+   min-height: var(--dg-row-height);
+   border-bottom: 1px solid var(--dg-border-soft);
+   cursor: pointer;
+}
+
+.dg-row--body:hover {
+   background: var(--dg-row-hover);
+}
+
+.dg-cell {
+   display: flex;
+   align-items: center;
+   min-width: 0;
+   padding: 0 var(--dg-cell-padding-x);
+   border-right: 1px solid var(--dg-border-soft);
+   color: var(--dg-text);
+   box-sizing: border-box;
+}
+
+.dg-cell:last-child {
+   border-right: none;
+}
+
+.dg-cell--header {
+   min-height: var(--dg-header-height);
+   font-size: 0.72rem;
+   font-weight: 700;
+   letter-spacing: 0.08em;
+   text-transform: uppercase;
+   color: var(--dg-text-strong);
+   background: linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.42));
+}
+
+.dg-cell--filter {
+   min-height: var(--dg-filter-height);
+   background: color-mix(in oklab, var(--dg-surface) 80%, white 20%);
+}
+
+.dg-align-left {
+   justify-content: flex-start;
+   text-align: left;
+}
+
+.dg-align-center {
+   justify-content: center;
+   text-align: center;
+}
+
+.dg-align-right {
+   justify-content: flex-end;
+   text-align: right;
+}
+
+.dg-label,
+.dg-value {
+   display: block;
+   min-width: 0;
+   overflow: hidden;
+   text-overflow: ellipsis;
+   white-space: nowrap;
+}
+
+.dg-headerButton {
+   width: 100%;
+   display: inline-flex;
+   align-items: center;
+   justify-content: inherit;
+   gap: 8px;
+   padding: 0;
+   border: 0;
+   background: transparent;
+   color: inherit;
+   font: inherit;
+   text-transform: inherit;
+   letter-spacing: inherit;
+   cursor: pointer;
+   min-width: 0;
+}
+
+.dg-headerButton:disabled {
+   cursor: default;
+   opacity: 0.85;
+}
+
+.dg-headerButton:focus-visible,
+.dg-filterInput:focus-visible {
+   outline: 2px solid var(--dg-accent);
+   outline-offset: 2px;
+   border-radius: 10px;
+}
+
+.dg-sortMark {
+   display: inline-flex;
+   align-items: center;
+   justify-content: center;
+   width: 1rem;
+   color: color-mix(in oklab, var(--dg-text-strong) 65%, transparent);
+   font-size: 0.85rem;
+   line-height: 1;
+}
+
+.dg-sortMark.is-asc,
+.dg-sortMark.is-desc {
+   color: var(--dg-accent);
+}
+
+.dg-filterInput {
+   width: 100%;
+   min-width: 0;
+   height: var(--dg-filter-input-height);
+   border: 1px solid color-mix(in oklab, var(--dg-border) 72%, transparent);
+   border-radius: 10px;
+   background: color-mix(in oklab, white 86%, var(--dg-accent-soft) 14%);
+   color: var(--dg-text-strong);
+   padding: 0 var(--dg-filter-input-padding-x);
+   font: inherit;
+}
+
+.dg-filterInput::placeholder {
+   color: color-mix(in oklab, var(--dg-text) 62%, transparent);
+}
+
+.dg-row--body:last-child {
+   border-bottom: none;
+}
+
+.dg-row--body:nth-child(2n) {
+   background: color-mix(in oklab, var(--dg-surface) 92%, white 8%);
+}
+
+.dg-row--body.is-selected {
+   background: var(--dg-row-selected);
+}
+
+.dg-row--summary {
+   min-height: var(--dg-row-height);
+   position: sticky;
+   bottom: 0;
+   z-index: 2;
+   border-top: 1px solid var(--dg-border);
+   background: color-mix(in oklab, var(--dg-surface-strong) 14%, white 86%);
+   font-weight: 700;
+   box-shadow: 0 -8px 16px rgba(15, 23, 42, 0.08);
+}
+
+.dg-cell--summary {
+   color: var(--dg-text-strong);
+}
+
+.dg-state {
+   min-height: var(--dg-state-min-height);
+   display: grid;
+   place-items: center;
+   padding: var(--dg-state-padding-y) var(--dg-state-padding-x);
+}
+
+.dg-stateCard {
+   display: grid;
+   gap: 6px;
+   padding: 16px 18px;
+   border: 1px solid var(--dg-border);
+   border-radius: 18px;
+   background: color-mix(in oklab, var(--dg-surface) 78%, white 22%);
+   color: var(--dg-text);
+   box-shadow: 0 14px 28px rgba(15, 23, 42, 0.08);
+}
+
+.dg-stateCard strong {
+   color: var(--dg-text-strong);
+}
+
+.dg-pagination,
+.dg-footer {
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   gap: 12px;
+   min-height: var(--dg-pagination-height);
+   padding: 0 14px;
+   border-top: 1px solid var(--dg-border);
+   background: color-mix(in oklab, var(--dg-surface-strong) 10%, white 90%);
+}
+
+.dg-pagination--transpose {
+   gap: 10px;
+   padding: 0 12px;
+}
+
+.dg-pagination__sizeControl {
+   display: flex;
+   align-items: center;
+   gap: 8px;
+   flex-wrap: wrap;
+}
+
+.dg-pagination__label {
+   color: var(--dg-text);
+   font-weight: 600;
+   white-space: nowrap;
+}
+
+.dg-pagination__summary {
+   color: var(--dg-text);
+   font-weight: 600;
+}
+
+.dg-pagination__actions {
+   display: flex;
+   gap: 8px;
+   flex-wrap: wrap;
+}
+
+.dg-paginationButton {
+   height: var(--dg-action-button-height);
+   padding: 0 12px;
+   border: 1px solid color-mix(in oklab, var(--dg-border) 72%, transparent);
+   border-radius: 9px;
+   background: color-mix(in oklab, white 86%, var(--dg-accent-soft) 14%);
+   color: var(--dg-text-strong);
+   font: inherit;
+   cursor: pointer;
+}
+
+.dg-paginationButton:disabled {
+   opacity: 0.55;
+   cursor: default;
+}
+
+.dg-paginationButton:focus-visible {
+   outline: 2px solid var(--dg-accent);
+   outline-offset: 2px;
+}
+
+.dg-paginationInput {
+   width: 72px;
+   height: var(--dg-action-button-height);
+   padding: 0 4px;
+   border: 1px solid color-mix(in oklab, var(--dg-border) 72%, transparent);
+   border-radius: 9px;
+   background: color-mix(in oklab, white 86%, var(--dg-accent-soft) 14%);
+   color: var(--dg-text-strong);
+   font: inherit;
+   box-sizing: border-box;
+}
+
+.dg-paginationInput:focus-visible {
+   outline: 2px solid var(--dg-accent);
+   outline-offset: 2px;
+}
+
+.dg-pagination--transpose .dg-pagination__label,
+.dg-pagination--transpose .dg-pagination__summary,
+.dg-pagination--transpose .dg-paginationInput,
+.dg-pagination--transpose .dg-paginationButton {
+   font-size: 0.78rem;
+}
+
+.dg-pagination--transpose .dg-pagination__actions {
+   flex-wrap: nowrap;
+   gap: 10px;
+}
+
+.dg-pagination--transpose .dg-pagination__sizeControl {
+   gap: 6px;
+}
+
+.dg-pagination--transpose .dg-pagination__label,
+.dg-pagination--transpose .dg-pagination__summary {
+   font-weight: 500;
+}
+
+.dg-pagination--transpose .dg-paginationInput {
+   width: 54px;
+}
+
+.dg-pagination--transpose .dg-paginationButton {
+   width: 36px;
+   height: 36px;
+   padding: 0;
+   display: inline-flex;
+   align-items: center;
+   justify-content: center;
+   text-align: center;
+   line-height: 1;
+}
+
+.dg-paginationIcon {
+   width: 1.35rem;
+   height: 1.35rem;
+   display: block;
+   color: currentColor;
+}
+
+.dg-footer {
+   min-height: var(--dg-footer-height);
+}
+
+@media (prefers-color-scheme: dark) {
+   .dg-shell {
+      --dg-surface: color-mix(in oklab, var(--bg, #111827) 84%, #000 16%);
+      --dg-surface-strong: color-mix(in oklab, var(--bg, #111827) 72%, #ffffff 28%);
+      --dg-border: color-mix(in oklab, var(--border, #273244) 84%, #ffffff 16%);
+      --dg-border-soft: color-mix(in oklab, var(--border, #273244) 58%, transparent);
+      --dg-text: var(--text, #cbd5e1);
+      --dg-text-strong: var(--text-h, #f8fafc);
+      --dg-row-hover: rgba(96, 165, 250, 0.12);
+      --dg-row-selected: rgba(96, 165, 250, 0.18);
+   }
+
+   .dg-frame {
+      box-shadow:
+         0 24px 60px rgba(0, 0, 0, 0.4),
+         0 2px 10px rgba(0, 0, 0, 0.22);
+   }
+
+   .dg-headerScroll {
+      background: color-mix(in oklab, var(--dg-surface-strong) 18%, #111827 82%);
+   }
+
+   .dg-row--header {
+      background: color-mix(in oklab, var(--dg-surface-strong) 18%, #111827 82%);
+   }
+
+   .dg-cell--header {
+      background: linear-gradient(180deg, rgba(17, 24, 39, 0.8), rgba(17, 24, 39, 0.55));
+   }
+
+   .dg-row--body:nth-child(2n) {
+      background: color-mix(in oklab, var(--dg-surface) 90%, #ffffff 10%);
+   }
+
+   .dg-row--body.is-selected {
+      background: rgba(96, 165, 250, 0.18);
+   }
+
+   .dg-cell--filter {
+      background: color-mix(in oklab, var(--dg-surface) 76%, #111827 24%);
+   }
+
+   .dg-filterInput {
+      background: color-mix(in oklab, #111827 92%, var(--dg-accent-soft) 8%);
+      color: var(--dg-text-strong);
+   }
+
+   .dg-transposeRecordShell {
+      background: color-mix(in oklab, var(--dg-surface) 76%, #111827 24%);
+   }
+
+   .dg-transposeRecordShell--summary {
+      background: color-mix(in oklab, var(--dg-surface-strong) 18%, #111827 82%);
+   }
+
+   .dg-transposeLabelCell,
+   .dg-transposeValueCell {
+      border-bottom-color: color-mix(in oklab, var(--dg-border) 78%, #ffffff 22%);
+   }
+
+   .dg-transposeLabelCell {
+      background: color-mix(in oklab, var(--dg-surface-strong) 18%, #111827 82%);
+   }
+
+   .dg-transposeValueCell {
+      background: color-mix(in oklab, var(--dg-surface) 86%, #111827 14%);
+   }
+
+   .dg-transposeValueCell:hover {
+      background: rgba(96, 165, 250, 0.12);
+   }
+
+   .dg-stateCard,
+   .dg-pagination,
+   .dg-footer {
+      background: color-mix(in oklab, var(--dg-surface) 84%, #111827 16%);
+   }
+
+   .dg-paginationButton {
+      background: color-mix(in oklab, #111827 88%, var(--dg-accent-soft) 12%);
+      color: var(--dg-text-strong);
+   }
+
+   .dg-pagination--transpose .dg-pagination__label,
+   .dg-pagination--transpose .dg-pagination__summary,
+   .dg-pagination--transpose .dg-paginationInput,
+   .dg-pagination--transpose .dg-paginationButton {
+      font-size: 0.76rem;
+   }
+}
