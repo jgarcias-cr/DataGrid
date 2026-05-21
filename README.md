@@ -1,22 +1,72 @@
 # Grid DataGrid Project
 
-This project is being shaped into a custom DataGrid component with improved UX, responsive behavior, and theme-aware rendering.
+A custom React DataGrid component focused on predictable sizing, synchronized scrolling, rich cell rendering, and responsive behavior.
 
-## Roadmap
+## What It Offers
 
-The development plan and progress tracker live here:
+- Horizontal scrolling with synchronized header and body regions
+- Fixed header while the data body scrolls vertically
+- Optional filter row
+- Column sorting
+- Single-row selection
+- Pagination with page-size control
+- Summary row support
+- Footer support
+- Custom header and cell rendering
+- Theme-aware styling with light, dark, and host-driven modes
+- Responsive mobile transpose mode
+- Demo-friendly sizing through `height` and `visibleRowCount`
 
-- [DataGrid roadmap](docs/datagrid-roadmap.md)
+## Component Highlights
 
-Currently, two official plugins are available:
+- `columns` and `rows` drive the grid content
+- `rowKey` supports stable row identity
+- `selection="single"` keeps one visible row selected at a time
+- `filterable` enables per-column filters when columns opt in
+- `sortable` enables header-driven sort cycling
+- `pagination` limits visible rows and exposes paging controls
+- `summary` can compute or render an aggregate row
+- `footer` can show status text or custom footer content
+- `mobileMode="auto"` switches to a transpose layout on narrow screens
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Layout Behavior
 
-## React Compiler
+- The grid shell respects the width of its parent container
+- The total grid width follows the sum of the column widths
+- Horizontal scrolling appears automatically when the columns exceed the available width
+- The grid height accounts for the header row, filter row, visible data rows, summary row, and footer row when those regions are rendered
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Demo
 
-## Expanding the ESLint configuration
+The sample app in `src/App.jsx` shows:
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- a richer grid with filtering, sorting, selection, pagination, and summary rendering
+- a shorter grid with a footer message
+
+## Getting Started
+
+Install dependencies and start the development server:
+
+```bash
+npm install
+npm run dev
+```
+
+Build the project for production:
+
+```bash
+npm run build
+```
+
+## Documentation
+
+- [API reference](docs/api.md)
+- [Behavior spec](docs/behavior-spec.md)
+- [Architecture notes](docs/architecture.md)
+- [Roadmap](docs/datagrid-roadmap.md)
+
+## Notes
+
+- The component source lives in `src/DataGrid.jsx`
+- Styling lives in `src/DataGrid.css`
+- The preview app lives in `src/App.jsx`
